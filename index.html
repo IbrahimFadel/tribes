@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tribes</title>
+
+	<link rel="stylesheet" type="text/css" href="/css/index.css">
+</head>
+<body>
+
+<script type="text/javascript">
+	var cTribe;
+	var i = 0;
+	var HumanIndex = 0;
+</script>
+
+<h1 class="header">Tribes</h1>
+
+<button type="button" onclick="cTribe.relocateSave()" class="hiddenOnLaunch">Save Tribe</button>
+
+<button type="button" onclick="cTribe = new Tribe(); localStorage.setItem('cTribe', JSON.stringify(cTribe))" id="NewTribeButton">New Tribe</button>
+
+<br><br><br><br>
+
+<form>
+	<br><br><br>
+
+	<div class="container" id="HumanDataForm">
+		<div class="container-centerContent">
+			<h5 class="hiddenOnLaunch">Human 1</h5><br><br><br>
+			<label class="hiddenOnLaunch">Human's Name</label><br>
+			<input type="text" name="HumanName" class="hiddenOnLaunch" id="Human1Name" placeholder="Ex. William Floyd" required><br><br>
+
+			<label class="hiddenOnLaunch">Human's Primary Skill</label><br>
+			<select class="hiddenOnLaunch" id="Human1Options">
+			  <option value="Hunter">Hunter</option>
+			  <option value="Gatherer">Gatherer</option>
+			  <option value="Crafter">Crafter</option>
+			</select><br><br>
+
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender1" Value="Male">Male</label>
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender1" Value="Female">Female</label>
+		</div>
+
+		<div class="container-centerContent">
+			<h5 class="hiddenOnLaunch">Human 2</h5><br><br><br>
+			<label class="hiddenOnLaunch">Human's Name</label><br>
+			<input type="text" name="HumanName" class="hiddenOnLaunch" id="Human2Name" placeholder="Ex. William Floyd" required><br><br>
+
+			<label class="hiddenOnLaunch">Human's Primary Skill</label><br>
+			<select class="hiddenOnLaunch" id="Human2Options">
+			  <option value="Hunter">Hunter</option>
+			  <option value="Gatherer">Gatherer</option>
+			  <option value="Crafter">Crafter</option>
+			</select><br><br>
+
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender2" Value="Male">Male</label>
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender2" Value="Female">Female</label>
+		</div>
+
+		<div class="container-centerContent">
+			<h5 class="hiddenOnLaunch">Human 3</h5><br><br><br>
+			<label class="hiddenOnLaunch">Human's Name</label><br>
+			<input type="text" name="HumanName" class="hiddenOnLaunch" id="Human3Name" placeholder="Ex. William Floyd" required><br><br>
+
+			<label class="hiddenOnLaunch">Human's Primary Skill</label><br>
+			<select class="hiddenOnLaunch" id="Human3Options">
+			  <option value="Hunter">Hunter</option>
+			  <option value="Gatherer">Gatherer</option>
+			  <option value="Crafter">Crafter</option>
+			</select><br><br>
+
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender3" Value="Male">Male</label>
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender3" Value="Female">Female</label>
+		</div>
+
+		<div class="container-centerContent">
+			<h5 class="hiddenOnLaunch">Human 4</h5><br><br><br>
+			<label class="hiddenOnLaunch">Human's Name</label><br>
+			<input type="text" name="HumanName" class="hiddenOnLaunch" id="Human4Name" placeholder="Ex. William Floyd" required><br><br>
+
+			<label class="hiddenOnLaunch">Human's Primary Skill</label><br>
+			<select class="hiddenOnLaunch" id="Human4Options">
+			  <option value="Hunter">Hunter</option>
+			  <option value="Gatherer">Gatherer</option>
+			  <option value="Crafter">Crafter</option>
+			</select><br><br>
+
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender4" Value="Male">Male</label>
+			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender4" Value="Female">Female</label>
+		</div>
+		<br>
+		<button type="button" class="hiddenOnLaunch" style="position: absolute; left: 48%;" onclick="cTribe.SaveHumanData()">Save</button>	
+
+	</div>
+	
+	<br>
+	<div class="container">
+	</div>
+</form>
+
+<br>
+<table id="PlayerSkillTable" border="1">
+</table>
+
+<script src="/scripts/game.js"></script>
+</body>
+</html>

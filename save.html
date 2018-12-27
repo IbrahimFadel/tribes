@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tribes - Save Tribe</title>
+
+	<link rel="stylesheet" type="text/css" href="/index.css">
+</head>
+<body>
+
+<script type="text/javascript">
+	window.onload = function() {
+		data = JSON.parse(localStorage.getItem('cTribe'));
+		console.log(data.humans);
+	}
+	//cTribe.humans.push(data);
+</script>
+
+<h1 class="header">Save In One of these slots</h1>
+
+<div class="saveStates">
+	<label>Save 1</label>
+	<input type="text" name="saveName" id="saveName1">
+	<button onclick="new Tribe(); cTribe.saveTribe()">Save</button><br><br>
+	<label>Save 2</label>
+	<button>Save</button><br><br>
+	<label>Save 3</label>
+	<button>Save</button><br><br>
+	<label>Save 4</label>
+	<button>Save</button><br><br>
+	<label>Save 5</label>
+	<button>Save</button>
+</div>
+
+<script src="localStorage.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+.header {
+	text-align: center;
+}
+
+.hiddenOnLaunch {
+	display: none;
+}
+
+.container-centerContent {
+	display: inline-block;
+	text-align: center;
+	padding: 35px;
+}
+
+.container {
+	margin: auto;
+	width: 70%;
+}
+
+.saveStates {
+	padding-top: 5%;
+	margin: auto;
+	width: 7%;
+}
