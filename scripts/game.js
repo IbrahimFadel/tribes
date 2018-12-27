@@ -73,7 +73,7 @@ function Tribe() {
 	}
 
 	this.relocateSave = function() {
-
+//Passing the data of the instance of the tribe and moving the user to save.html
 		var TribeData = JSON.stringify(cTribe);
 		fs.writeFileSync('data.jsons', TribeData);
 
@@ -85,6 +85,7 @@ function Tribe() {
 	}
 
 	this.saveTribe = function() {
+		// Save tribe data to local storage
 		//var humans = this.humans;
 		//localStorage.setItem('humans', JSON.stringify(humans));
 		//document.getElementById("saveName1").value = "";
@@ -102,6 +103,13 @@ function Human() {
 	this.IsAlive = true;
 	this.Birthdate = null;
 	this.Name = null;
+	this.IsInjured = false; //Can occur during hunting or after a chance roll
+	this.IsPregnant = false;
+	this.IsNursing = false;
+	this.IsFetus = false; //unborn, conceived
+	this.nAge = null; //Age in years
+	//In this implementation, we are ignoring "strength" and "illness"
+	
 }
 function GameSettings() {
 	this.nHumansStart = 4;
