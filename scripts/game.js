@@ -10,33 +10,40 @@ app.get('/', (req, res, next) => {
 app.get('/index.html', (req, res, next) => {
 	res.sendFile(__dirname + '/index.html');
 });
-// programming basha
+
 app.listen(PORT, () => {
 	console.log("Server listening on port: " + PORT + "");
 });
+
+/* Purpose of code above is to serve files when requests are made. */
 
 function Tribe() {
 	NewTribeButton = document.getElementById("NewTribeButton");
 	NewTribeButton.style.display = "none";
 	this.humans = []; // created an array of variables of type Human
+	//Ayman suggests changing variable name from "humans" to "arrHumans"
 
 	var hiddenOnLaunch = document.getElementsByClassName("hiddenOnLaunch");
 	for(let i = 0; i < hiddenOnLaunch.length; i++) {
 		hiddenOnLaunch[i].style.display = "inline";
 	}
+	/* When NewTribeButton is pressed, user interface displays form to enter data on adult humans of the tribe at year 0. */
 
 	var cGameSettings = new GameSettings();
 	var nHumans = cGameSettings.nHumansStart; 
+	//nHumansStart is the number of human adults in tribe at year 0.
 	for(let i = 0; i < nHumans; i++) {
 		this.humans.push(new Human());
 	}
-
+	//Add nHumansStart number of humans to array "humans"
+	
 	this.SaveHumanData = function() {
 		var Name;
 		var PrimarySkill;
 		var PlayerSkillTable = document.getElementById("PlayerSkillTable");
 		var PrimarySkillOptions;
 		var Gender;
+		// The index.html currently does not allow for a variable number of initial human adults in tribe
 		for(i = 0; i < nHumans; i++) {
 			PrimarySkillOptions = document.getElementById("Human" + (i+1) + "Options");
 			GenderOptions = document.getElementsByName("Gender" + (i+1));
