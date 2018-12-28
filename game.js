@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8000;
-var fs = require('file-system');
+//var fs = require('file-system');
 
 app.get('/', (req, res, next) => {
 	res.sendFile(__dirname + '/index.html');
@@ -15,8 +15,8 @@ app.get('/css/index.css', (req, res, next) => {
 	res.sendFile(__dirname + '/css/index.css');
 });
 
-app.get('/scripts/game.js', (req, res, next) => {
-	res.sendFile(__dirname + '/scripts/game.js');
+app.get('/game.js', (req, res, next) => {
+	res.sendFile(__dirname + '/game.js');
 });
 
 app.listen(PORT, () => {
@@ -33,6 +33,9 @@ function Terrain() {
 	this.nGameTrackForest = null;
 	this.nGameTrackHills = null;
 }
+
+/* Purpose of code above is to serve files when requests are made. */
+
 
 function Tribe() {
 	this.grain = 0;
@@ -53,23 +56,30 @@ function Tribe() {
 	NewTribeButton = document.getElementById("NewTribeButton");
 	NewTribeButton.style.display = "none";
 
+	this.humans = []; // created an array of variables of type Human
+	//Ayman suggests changing variable name from "humans" to "arrHumans"
+
 	var hiddenOnLaunch = document.getElementsByClassName("hiddenOnLaunch");
 	for(let i = 0; i < hiddenOnLaunch.length; i++) {
 		hiddenOnLaunch[i].style.display = "inline";
 	}
+	/* When NewTribeButton is pressed, user interface displays form to enter data on adult humans of the tribe at year 0. */
 
 	var cGameSettings = new GameSettings();
 	var nHumans = cGameSettings.nHumansStart; 
+	//nHumansStart is the number of human adults in tribe at year 0.
 	for(let i = 0; i < nHumans; i++) {
 		this.humans.push(new Human());
 	}
-
+	//Add nHumansStart number of humans to array "humans"
+	
 	this.SaveHumanData = function() {
 		var Name;
 		var PrimarySkill; // Need to assing it to the humans!!!!!
 		var PlayerSkillTable = document.getElementById("PlayerSkillTable");
 		var PrimarySkillOptions;
 		var Gender;
+		// The index.html currently does not allow for a variable number of initial human adults in tribe
 		for(i = 0; i < nHumans; i++) {
 			PrimarySkillOptions = document.getElementById("Human" + (i+1) + "Options");
 			GenderOptions = document.getElementsByName("Gender" + (i+1));
@@ -101,7 +111,7 @@ function Tribe() {
 	}
 
 	this.relocateSave = function() {
-
+//Passing the data of the instance of the tribe and moving the user to save.html
 		var TribeData = JSON.stringify(cTribe);
 		fs.writeFileSync('data.jsons', TribeData);
 
@@ -113,6 +123,7 @@ function Tribe() {
 	}
 
 	this.saveTribe = function() {
+		// Save tribe data to local storage
 		//var humans = this.humans;
 		//localStorage.setItem('humans', JSON.stringify(humans));
 		//document.getElementById("saveName1").value = "";
@@ -131,6 +142,12 @@ function Human() {
 	this.Birthdate = null;
 	this.Name = null;
 	this.HasBasket = false;
+	this.Strength = 1;  // 0 = weak, 1 = normal, 2 = strong
+	this.IsInjured = false; //Can occur during hunting or after a chance roll
+	this.IsPregnant = false;
+	this.IsNursing = false;
+	this.IsFetus = false; //unborn, conceived
+	this.nAge = null; //Age in years
 
 	this.Gather = function() {
 		//Roll three dice
@@ -204,7 +221,7 @@ function Human() {
 			} else if(nGatheringRollValue <= 7) {
 				cTribe.food += 2;
 			}
-		} else if(cTribe.currentTerrain == cTribe.currentTerrainconForest) {
+		} else if(cTribe.currentTerrain == cTribe.currentTerrain.conForest) {
 			if(nGatheringRollValue >= 15) {
 				cTribe.food += 12;
 			} else if(nGatheringRollValue >= 13 && nGatheringRollValue <= 14) {
@@ -220,7 +237,7 @@ function Human() {
 			} else if(nGatheringRollValue <= 7) {
 				cTribe.food += 3;
 			}
-		} else if(cTribe.currentTerrain == cTribe.currentTerrainconMarsh) {
+		} else if(cTribe.currentTerrain == cTribe.currentTerrain.conMarsh) {
 			if(nGatheringRollValue >= 17 && nGatheringRollValue <= 18) {
 				cTribe.grain += 12;
 			} else if(nGatheringRollValue >= 14 && nGatheringRollValue <= 16) {
@@ -236,7 +253,7 @@ function Human() {
 			} else if(nGatheringRollValue <= 7) {
 				cTribe.food += 4;
 			}
-		} else if(cTribe.currentTerrain == cTribe.currentTerrainconHills) {
+		} else if(cTribe.currentTerrain == cTribe.currentTerrain.conHills) {
 			if(nGatheringRollValue >= 16) {
 				cTribe.food += 12;
 			} else if(nGatheringRollValue >= 14 && nGatheringRollValue <= 15) {
@@ -254,13 +271,208 @@ function Human() {
 			}
 		}
 
-		console.log(cTribe.food + " " + cTribe.grain);
+		console.log("Food: " + cTribe.food + " Grain: " + cTribe.grain);
 	}
 
 	this.hunt = function() {
+		// 
+
+
+
 		var cCalendar = cTribe.cCalendar;
-		var bGatheringSeasonCold = cCalendar.IsColdSeason;
+		var bHuntingSeasonCold = cCalendar.IsColdSeason;
+
+		var nHuntingRollValue = 0;
+
+		var nHuntingRollOneVal = 0;
+		var nHuntingRollTwoVal = 0;
+
+		nHuntingRollOneVal = rollSixSidedDice() + rollSixSidedDice() + rollSixSidedDice();
+
+		if(this.strength == 2) {
+			nHuntingRollOneVal += 1;
+		} else if(this.strength == 1) {
+			nHuntingRollOneVal -= 1;
+		}
+
+		if(this.PrimarySkill != 'Hunter') {
+			nHuntingRollOneVal -= 3;
+		}
+
+		if(this.bHuntingSeasonCold) {
+			this.nHuntingRollOneVal -= 1;
+		}
+
+		if(nHuntingRollOneVal < 9) {
+			console.log("Hunt Failed");
+		} else {
+			if(cTribe.currentTerrain == cTribe.currentTerrain.conVeldt) {
+				if(nHuntingRollOneVal >= 18) {
+					cTribe.food += 80;
+				} else if(nHuntingRollOneVal == 17) {
+					cTribe.food += 50;
+				} else if(nHuntingRollOneVal == 16) {
+					cTribe.food += 40;
+				} else if(nHuntingRollOneVal == 15) {
+					cTribe.food += 30;
+				} else if(nHuntingRollOneVal == 14) {
+					cTribe.food += 25;
+				} else if(nHuntingRollOneVal == 13) {
+					cTribe.food += 20;
+				} else if(nHuntingRollOneVal == 12) {
+					cTribe.food += 15;
+				} else if(nHuntingRollOneVal == 11) {
+					cTribe.food += 8;
+				} else if(nHuntingRollOneVal == 10) {
+					cTribe.food += 2;
+				} else if(nHuntingRollOneVal == 9) {
+					cTribe.food += 2;
+				} else if(nHuntingRollOneVal >= 7 && nHuntingRollOneVal <= 8) {
+					cTribe.food += 0;
+				} else if(nHuntingRollOneVal == 6) {
+					if(this.PrimarySkill != "Hunter") {
+						this.IsInjured = true;
+						// Miss next turn
+					}
+				} else if(nHuntingRollOneVal >= 4 && nHuntingRollOneVal <= 5) {
+					this.IsInjured = true;
+					// Miss next turn
+				} else if(nHuntingRollOneVal == 3) {
+					if(this.strength == 2) {
+						this.strength = 1
+					} else if(this.strength == 1) {
+						this.strength = 0;
+					}
+
+					// Become severely injured, miss next turn
+				}
+			} else if(cTribe.currentTerrain == cTribe.currentTerrain.conForest) {
+				if(nHuntingRollOneVal >= 18) {
+					cTribe.food += 60;
+				} else if(nHuntingRollOneVal == 17) {
+					cTribe.food += 50;
+				} else if(nHuntingRollOneVal == 16) {
+					cTribe.food += 40;
+				} else if(nHuntingRollOneVal == 15) {
+					cTribe.food += 30;
+				} else if(nHuntingRollOneVal == 14) {
+					cTribe.food += 25;
+				} else if(nHuntingRollOneVal == 13) {
+					cTribe.food += 25;
+				} else if(nHuntingRollOneVal == 12) {
+					cTribe.food += 15;
+				} else if(nHuntingRollOneVal == 11) {
+					cTribe.food += 8;
+				} else if(nHuntingRollOneVal == 10) {
+					cTribe.food += 4;
+				} else if(nHuntingRollOneVal == 9) {
+					cTribe.food += 2;
+				} else if(nHuntingRollOneVal >= 7 && nHuntingRollOneVal <= 8) {
+					cTribe.food += 0;
+				} else if(nHuntingRollOneVal == 6) {
+					if(this.PrimarySkill != "Hunter") {
+						this.IsInjured = true;
+						// Miss next turn
+					}
+				} else if(nHuntingRollOneVal >= 4 && nHuntingRollOneVal <= 5) {
+					this.IsInjured = true;
+					// Miss next turn
+				} else if(nHuntingRollOneVal == 3) {
+					if(this.strength == 2) {
+						this.strength = 1
+					} else if(this.strength == 1) {
+						this.strength = 0;
+					}
+
+					// Become severely injured, miss next turn
+				}
+			} else if(cTribe.currentTerrain == cTribe.currentTerrain.conMarsh) {
+				if(nHuntingRollOneVal >= 18) {
+					cTribe.food += 80;
+				} else if(nHuntingRollOneVal == 17) {
+					cTribe.food += 40;
+				} else if(nHuntingRollOneVal == 16) {
+					cTribe.food += 35;
+				} else if(nHuntingRollOneVal == 15) {
+					cTribe.food += 30;
+				} else if(nHuntingRollOneVal == 14) {
+					cTribe.food += 25;
+				} else if(nHuntingRollOneVal == 13) {
+					cTribe.food += 15;
+				} else if(nHuntingRollOneVal == 12) {
+					cTribe.food += 12;
+				} else if(nHuntingRollOneVal == 11) {
+					cTribe.food += 8;
+				} else if(nHuntingRollOneVal == 10) {
+					cTribe.food += 4;
+				} else if(nHuntingRollOneVal == 9) {
+					cTribe.food += 2;
+				} else if(nHuntingRollOneVal >= 7 && nHuntingRollOneVal <= 8) {
+					cTribe.food += 0;
+				} else if(nHuntingRollOneVal == 6) {
+					if(this.PrimarySkill != "Hunter") {
+						this.IsInjured = true;
+						// Miss next turn
+					}
+				} else if(nHuntingRollOneVal >= 4 && nHuntingRollOneVal <= 5) {
+					this.IsInjured = true;
+					// Miss next turn
+				} else if(nHuntingRollOneVal == 3) {
+					if(this.strength == 2) {
+						this.strength = 1
+					} else if(this.strength == 1) {
+						this.strength = 0;
+					}
+
+					// Become severely injured, miss next turn
+				}
+			} else if(cTribe.currentTerrain == cTribe.currentTerrain.conHills) {
+				if(nHuntingRollOneVal >= 18) {
+					cTribe.food += 50;
+				} else if(nHuntingRollOneVal == 17) {
+					cTribe.food += 45;
+				} else if(nHuntingRollOneVal == 16) {
+					cTribe.food += 35;
+				} else if(nHuntingRollOneVal == 15) {
+					cTribe.food += 30;
+				} else if(nHuntingRollOneVal == 14) {
+					cTribe.food += 25;
+				} else if(nHuntingRollOneVal == 13) {
+					cTribe.food += 15;
+				} else if(nHuntingRollOneVal == 12) {
+					cTribe.food += 12;
+				} else if(nHuntingRollOneVal == 11) {
+					cTribe.food += 8;
+				} else if(nHuntingRollOneVal == 10) {
+					cTribe.food += 4;
+				} else if(nHuntingRollOneVal == 9) {
+					cTribe.food += 2;
+				} else if(nHuntingRollOneVal >= 7 && nHuntingRollOneVal <= 8) {
+					cTribe.food += 0;
+				} else if(nHuntingRollOneVal == 6) {
+					if(this.PrimarySkill != "Hunter") {
+						this.IsInjured = true;
+						// Miss next turn
+					}
+				} else if(nHuntingRollOneVal >= 4 && nHuntingRollOneVal <= 5) {
+					this.IsInjured = true;
+					// Miss next turn
+				} else if(nHuntingRollOneVal == 3) {
+					if(this.strength == 2) {
+						this.strength = 1
+					} else if(this.strength == 1) {
+						this.strength = 0;
+					}
+
+					// Become severely injured, miss next turn
+				}
+			}
+		}
+
+
 	}
+	//In this implementation, we are ignoring "strength" and "illness"
+	
 }
 
 function Calendar() {
