@@ -8,16 +8,16 @@
 <body>
 
 <script type="text/javascript">
-	var cTribe;
+	var objTribe;
 	var i = 0;
 	var HumanIndex = 0;
 </script>
 
 <h1 class="header">Tribes</h1>
 
-<button type="button" onclick="cTribe.relocateSave()" class="hiddenOnLaunch">Save Tribe</button>
+<button type="button" onclick="objTribe.relocateSave()" class="hiddenOnLaunch">Save Tribe</button>
 
-<button type="button" onclick="cTribe = new Tribe(); localStorage.setItem('cTribe', JSON.stringify(cTribe))" id="NewTribeButton">New Tribe</button>
+<button type="button" onclick="objTribe = new Tribe(); localStorage.setItem('objTribe', JSON.stringify(objTribe))" id="NewTribeButton">New Tribe</button>
 
 <br><br><br><br>
 
@@ -90,7 +90,7 @@
 			<label class="hiddenOnLaunch"><input type="Radio" Name="Gender4" Value="Female">Female</label>
 		</div>
 		<br>
-		<button type="button" class="hiddenOnLaunch" style="position: absolute; left: 48%;" onclick="cTribe.SaveHumanData()">Save</button>
+		<button type="button" class="hiddenOnLaunch" style="position: absolute; left: 48%;" onclick="objTribe.SaveHumanData()">Save</button>
 
 	</div>
 
