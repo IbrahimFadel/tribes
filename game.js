@@ -75,7 +75,7 @@ function Tribe() {
 	
 	this.SaveHumanData = function() {
 		var Name;
-		var PrimarySkill; // Need to assing it to the humans!!!!!
+		var PrimarySkill;
 		var PlayerSkillTable = document.getElementById("PlayerSkillTable");
 		var PrimarySkillOptions;
 		var Gender;
